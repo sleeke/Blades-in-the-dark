@@ -3,6 +3,12 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import { getUserByEmail } from '@/lib/db';
 
+// Support dynamic Vercel preview URLs: NEXTAUTH_URL takes priority,
+// otherwise fall back to VERCEL_URL (set automatically by Vercel on every deployment).
+if (!process.env.NEXTAUTH_URL && process.env.VERCEL_URL) {
+  process.env.NEXTAUTH_URL = `https://${process.env.VERCEL_URL}`;
+}
+
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
