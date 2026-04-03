@@ -6,25 +6,38 @@ import { defaultCharacterData } from '@/lib/characterDefaults';
 const sampleData = {
   ...defaultCharacterData,
   alias: 'The Whisper',
-  playbook: 'Slide',
+  playbook: 'slide' as const,
   heritage: 'Akoros',
-  background: 'Criminal',
+  heritageDetail: 'Born in the dockyards, raised among sailors and smugglers.',
+  background: 'Underworld',
+  backgroundDetail: 'Ran numbers for a vice den before going independent.',
+  look: 'Narrow eyes, quick hands, always watching the exits',
   vice: 'Gambling',
-  lookDescription: 'Narrow eyes, quick hands, always watching the exits',
+  vicePurveyor: 'Drav at The Six Arms',
   stress: 3,
   trauma: 1,
   coins: 2,
   stash: 10,
-  xp: 4,
   playbookXp: 2,
+  insightXp: 1,
+  prowessXp: 0,
+  resolveXp: 3,
   traumaConditions: { ...defaultCharacterData.traumaConditions, Haunted: true },
   hunt: 1,
   study: 2,
-  finesse: 3,
+  finesse: 1,
   consort: 2,
-  sway: 3,
-  abilities: { ...defaultCharacterData.abilities, Battleborn: true, 'Iron Will': true },
-  items: { ...defaultCharacterData.items, Dagger: true, 'Fine Clothes': true },
+  sway: 1,
+  harm: {
+    level3: '',
+    level2a: 'Bruised ribs',
+    level2b: '',
+    level1a: 'Pulled muscle',
+    level1b: '',
+  },
+  abilities: { 'Trust in Me': true, 'Cloak & Dagger': false, "Rook's Gambit": false },
+  standardItems: { ...defaultCharacterData.standardItems, blade_or_two: true, pistol: true },
+  playbookItems: { fine_clothes_jewelry: true, cane_sword: false },
   notes: 'Owes Roric 4 coin. Meet with Lady Nyr on the 3rd bell. Do not trust the Gondoliers.',
 };
 
@@ -48,3 +61,4 @@ export default function DemoPage() {
     </div>
   );
 }
+
