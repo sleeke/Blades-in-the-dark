@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0d0d0f;
+  --foreground: #d4d0c8;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+/* Subtle dark parchment texture via gradient */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(60, 20, 10, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(20, 10, 40, 0.2) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+* {
+  position: relative;
+  z-index: 1;
+}
