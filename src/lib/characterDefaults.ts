@@ -364,12 +364,11 @@ export const defaultCharacterData = {
   resolveXp: 0,
   playbookXp: 0,
 
-  // XP triggers (checked at end of session)
+  // XP triggers — tracked with pips (0–2 each) at end of session
   xpTriggers: {
-    tookDesperateAction: false,
-    challengePlaybook: false,
-    expressedBeliefOrDrive: false,
-    dealWithViceOrTrauma: false,
+    violence: 0,    // 0–2: You addressed a challenge with violence or coercion.
+    beliefs: 0,     // 0–2: You expressed your beliefs, drives, heritage, or background.
+    viceTrauma: 0,  // 0–2: You struggled with issues from your vice or traumas during the session.
   },
 
   // Actions (rated 0–4, assign 4 dots initially, max 2 each)

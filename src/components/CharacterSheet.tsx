@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import TextField from '@/components/TextField';
 import CheckboxField from '@/components/CheckboxField';
 import Counter from '@/components/Counter';
@@ -18,7 +18,6 @@ import {
   PLAYBOOK_SPECIAL_ABILITIES,
   PLAYBOOK_ITEMS,
   PLAYBOOK_FRIENDS,
-  PLAYBOOK_XP_CHALLENGES,
   PLAYBOOK_GATHER_INFO,
   STANDARD_ITEMS,
 } from '@/lib/characterDefaults';
@@ -65,10 +64,33 @@ export default function CharacterSheet({
   const [data, setData] = useState<CharacterData>(initialData);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const isFirstRender = useRef(true);
+  const onSaveRef = useRef(onSave);
+  useEffect(() => { onSaveRef.current = onSave; }, [onSave]);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    setSaved(false);
+    const timer = setTimeout(async () => {
+      setSaving(true);
+      try {
+        await onSaveRef.current(name, data);
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
+      } catch (e) {
+        console.error('Auto-save failed:', e);
+      } finally {
+        setSaving(false);
+      }
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, [name, data]);
 
   const update = useCallback(<K extends keyof CharacterData>(key: K, value: CharacterData[K]) => {
     setData((prev) => ({ ...prev, [key]: value }));
-    setSaved(false);
   }, []);
 
   const updateNested = useCallback(
@@ -77,19 +99,17 @@ export default function CharacterSheet({
         ...prev,
         [key]: { ...(prev[key] as Record<string, boolean>), [nestedKey]: value },
       }));
-      setSaved(false);
     },
     []
   );
 
-  // Updates a field within a nested object (e.g. harm.level3, armor.used, xpTriggers.tookDesperateAction)
+  // Updates a field within a nested object (e.g. harm.level3, armor.used, xpTriggers.violence)
   const updateNestedValue = useCallback(
     <K extends keyof CharacterData>(key: K, field: string, value: unknown) => {
       setData((prev) => ({
         ...prev,
         [key]: { ...(prev[key] as Record<string, unknown>), [field]: value },
       }));
-      setSaved(false);
     },
     []
   );
@@ -101,7 +121,6 @@ export default function CharacterSheet({
         friends[index] = { ...friends[index], [field]: value };
         return { ...prev, friends };
       });
-      setSaved(false);
     },
     []
   );
@@ -112,19 +131,7 @@ export default function CharacterSheet({
       answers[index] = value;
       return { ...prev, gatherInfoAnswers: answers };
     });
-    setSaved(false);
   }, []);
-
-  const handleSave = async () => {
-    setSaving(true);
-    try {
-      await onSave(name, data);
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
-    } finally {
-      setSaving(false);
-    }
-  };
 
   const playbook = data.playbook;
   const abilities = useMemo(
@@ -143,7 +150,6 @@ export default function CharacterSheet({
     () => (playbook ? PLAYBOOK_GATHER_INFO[playbook] ?? [] : []),
     [playbook]
   );
-  const xpChallenge = playbook ? PLAYBOOK_XP_CHALLENGES[playbook] : '';
 
   // Load tracking
   const loadLimit = LOAD_CAPACITY[data.load];
@@ -157,21 +163,6 @@ export default function CharacterSheet({
     });
     return total;
   }, [data.standardItems, data.playbookItems, playbookItems]);
-
-  const saveBtn = (label = 'Save') => (
-    <button
-      onClick={handleSave}
-      disabled={saving}
-      className={
-        'px-5 py-2 rounded text-sm font-semibold uppercase tracking-widest transition-all duration-200 ' +
-        (saved
-          ? 'bg-green-800/60 border border-green-700 text-green-300'
-          : 'bg-amber-700/80 hover:bg-amber-600/80 border border-amber-600 text-stone-100 disabled:opacity-50')
-      }
-    >
-      {saving ? 'Saving…' : saved ? '✓ Saved' : label}
-    </button>
-  );
 
   const actionRating = (label: string, key: keyof CharacterData) => (
     <div key={key} className="flex items-center justify-between gap-2">
@@ -202,7 +193,7 @@ export default function CharacterSheet({
           <input
             type="text"
             value={name}
-            onChange={(e) => { setName(e.target.value); setSaved(false); }}
+            onChange={(e) => setName(e.target.value)}
             className="w-full bg-transparent border-b-2 border-amber-700 focus:border-amber-400
                        outline-none text-2xl font-bold text-stone-100 pb-1 tracking-wide
                        placeholder-stone-600 transition-colors duration-200"
@@ -210,7 +201,9 @@ export default function CharacterSheet({
             placeholder="Enter name…"
           />
         </div>
-        {saveBtn()}
+        <div className="text-xs text-stone-500 italic h-8 flex items-center">
+          {saving ? 'Saving…' : saved ? '✓ Saved' : ''}
+        </div>
       </div>
 
       {/* ── Identity ─────────────────────────────────── */}
@@ -329,30 +322,38 @@ export default function CharacterSheet({
           <Counter label="Prowess XP (0–6)" value={data.prowessXp} onChange={(v) => update('prowessXp', v)} max={6} dotStyle />
           <Counter label="Resolve XP (0–6)" value={data.resolveXp} onChange={(v) => update('resolveXp', v)} max={6} dotStyle />
         </div>
-        <div className="pt-2 space-y-2">
-          <SubLabel>XP Triggers (check at end of session)</SubLabel>
-          <CheckboxField
-            label="You made a desperate action roll"
-            checked={data.xpTriggers.tookDesperateAction}
-            onChange={(v) => updateNestedValue('xpTriggers', 'tookDesperateAction', v)}
-          />
-          {xpChallenge && (
-            <CheckboxField
-              label={xpChallenge}
-              checked={data.xpTriggers.challengePlaybook}
-              onChange={(v) => updateNestedValue('xpTriggers', 'challengePlaybook', v)}
-            />
-          )}
-          <CheckboxField
-            label="You expressed your beliefs, drives, heritage, or background"
-            checked={data.xpTriggers.expressedBeliefOrDrive}
-            onChange={(v) => updateNestedValue('xpTriggers', 'expressedBeliefOrDrive', v)}
-          />
-          <CheckboxField
-            label="You struggled with issues of your vice or trauma"
-            checked={data.xpTriggers.dealWithViceOrTrauma}
-            onChange={(v) => updateNestedValue('xpTriggers', 'dealWithViceOrTrauma', v)}
-          />
+        <div className="pt-2 space-y-3">
+          <SubLabel>XP Triggers (mark at end of session)</SubLabel>
+          <p className="text-xs text-stone-500 italic">Each trigger can be marked up to 2 times. Tracked separately from the main XP tracks.</p>
+          {(
+            [
+              { key: 'violence' as const, label: 'You addressed a challenge with violence or coercion.' },
+              { key: 'beliefs' as const, label: 'You expressed your beliefs, drives, heritage, or background.' },
+              { key: 'viceTrauma' as const, label: 'You struggled with issues from your vice or traumas during the session.' },
+            ] as const
+          ).map(({ key, label }) => {
+            const val = data.xpTriggers[key] as number ?? 0;
+            return (
+              <div key={key} className="flex items-center gap-3">
+                <div className="flex items-center gap-1.5 flex-shrink-0">
+                  {Array.from({ length: 2 }, (_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => updateNestedValue('xpTriggers', key, val === i + 1 ? i : i + 1)}
+                      className={
+                        'w-5 h-5 rounded-full border-2 transition-all duration-150 ' +
+                        (i < val
+                          ? 'bg-amber-500 border-amber-400 shadow-[0_0_6px_rgba(245,158,11,0.5)]'
+                          : 'bg-stone-900 border-stone-600 hover:border-amber-700')
+                      }
+                      aria-label={`Set "${label}" to ${i + 1}`}
+                    />
+                  ))}
+                </div>
+                <span className="text-sm text-stone-300">{label}</span>
+              </div>
+            );
+          })}
         </div>
       </Section>
 
@@ -637,11 +638,6 @@ export default function CharacterSheet({
           placeholder="Contacts, debts, schemes, secrets, jobs in progress…"
         />
       </Section>
-
-      {/* ── Bottom save ─────────────────────────────────── */}
-      <div className="flex justify-end pb-8">
-        {saveBtn('Save Changes')}
-      </div>
     </div>
   );
 }

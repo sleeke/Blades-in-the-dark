@@ -31,7 +31,7 @@ export default function Counter({
         <span className="text-xs font-semibold uppercase tracking-widest text-amber-500/80">
           {label}
         </span>
-        <div className="flex items-center gap-1.5 flex-wrap">
+        <div className="flex items-center gap-1.5 flex-nowrap overflow-x-auto">
           {Array.from({ length: max }, (_, i) => (
             <button
               key={i}
