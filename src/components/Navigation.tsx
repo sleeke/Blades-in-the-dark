@@ -78,8 +78,8 @@ export default function Navigation() {
 
             {open && (
               <div
-                className="absolute right-0 mt-2 w-52 rounded-lg border border-stone-800 bg-stone-950/95
-                           backdrop-blur-sm shadow-xl shadow-black/40 py-1"
+                className="absolute right-0 top-full mt-1 w-52 rounded-lg border border-stone-800 bg-stone-950/95
+                           shadow-xl shadow-black/40 py-1 z-50"
                 role="menu"
               >
                 <div className="px-4 py-2 border-b border-stone-800">
