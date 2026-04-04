@@ -5,6 +5,24 @@
   --foreground: #d4d0c8;
 }
 
+[data-theme="light"] {
+  --background: #e8e0d4;
+  --foreground: #1a1410;
+
+  /* Remap stone palette to warm parchment tones */
+  --color-stone-950: oklch(92% 0.01 60);   /* #e8e0d4 — parchment background */
+  --color-stone-900: oklch(88% 0.012 60);  /* #ddd4c5 — section/input backgrounds */
+  --color-stone-800: oklch(76% 0.02 55);   /* #c4b4a0 — borders */
+  --color-stone-700: oklch(65% 0.025 50);  /* #a89070 — medium borders */
+  --color-stone-600: oklch(52% 0.03 45);   /* #7a6050 — subtle text / hover borders */
+  --color-stone-500: oklch(46% 0.025 45);  /* #6b5444 — muted/hint text */
+  --color-stone-400: oklch(38% 0.022 42);  /* #584038 — secondary text */
+  --color-stone-300: oklch(28% 0.02 40);   /* #3c2820 — primary text */
+  --color-stone-200: oklch(20% 0.018 38);  /* #281810 — bright text */
+  --color-stone-100: oklch(13% 0.015 36);  /* #1a1008 — near-black */
+  --color-stone-50:  oklch(9%  0.012 34);  /* #120c06 — deepest */
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -29,7 +47,12 @@ body::before {
   z-index: 0;
 }
 
+[data-theme="light"] body::before {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(120, 80, 30, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(80, 50, 20, 0.1) 0%, transparent 60%);
+}
+
 * {
-  position: relative;
-  z-index: 1;
+  box-sizing: border-box;
 }

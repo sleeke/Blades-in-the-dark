@@ -14,8 +14,8 @@ export default function CheckboxField({
   description,
 }: CheckboxFieldProps) {
   return (
-    <label className="flex items-start gap-3 cursor-pointer group">
-      <div className="relative mt-0.5 flex-shrink-0">
+    <label className="flex items-center gap-3 cursor-pointer group">
+      <div className="relative flex-shrink-0">
         <input
           type="checkbox"
           checked={checked}

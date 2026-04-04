@@ -178,6 +178,7 @@ export default function CharacterSheet({
         onChange={(v) => update(key, v as CharacterData[typeof key])}
         max={4}
         dotStyle
+        hideReset
       />
     </div>
   );
@@ -279,8 +280,8 @@ export default function CharacterSheet({
         hint="Fill stress boxes as you push yourself or resist consequences. At 9 stress you are taken out."
       >
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-          <Counter label="Stress" value={data.stress} onChange={(v) => update('stress', v)} max={9} dotStyle />
-          <Counter label="Trauma" value={data.trauma} onChange={(v) => update('trauma', v)} max={4} dotStyle />
+          <Counter label="Stress" value={data.stress} onChange={(v) => update('stress', v)} max={9} dotStyle hideReset />
+          <Counter label="Trauma" value={data.trauma} onChange={(v) => update('trauma', v)} max={4} dotStyle hideReset />
         </div>
         <div className="pt-2">
           <SubLabel>Trauma Conditions</SubLabel>
@@ -624,7 +625,7 @@ export default function CharacterSheet({
         title="Project Clock"
         hint="A 4-segment clock for tracking a long-running personal project or goal."
       >
-        <Counter label="Progress" value={data.projectClock} onChange={(v) => update('projectClock', v)} max={4} dotStyle />
+        <Counter label="Progress" value={data.projectClock} onChange={(v) => update('projectClock', v)} max={4} dotStyle hideReset />
       </Section>
 
       {/* ── Notes ───────────────────────────────────────── */}
