@@ -7,6 +7,7 @@ interface CounterProps {
   min?: number;
   max?: number;
   dotStyle?: boolean;
+  hideReset?: boolean;
 }
 
 export default function Counter({
@@ -16,6 +17,7 @@ export default function Counter({
   min = 0,
   max = 10,
   dotStyle = false,
+  hideReset = false,
 }: CounterProps) {
   const handleDecrement = () => {
     if (value > min) onChange(value - 1);
@@ -45,7 +47,7 @@ export default function Counter({
               aria-label={`Set ${label} to ${i + 1}`}
             />
           ))}
-          {value > 0 && (
+          {value > 0 && !hideReset && (
             <button
               onClick={() => onChange(0)}
               className="text-xs text-stone-500 hover:text-red-400 transition-colors ml-1"

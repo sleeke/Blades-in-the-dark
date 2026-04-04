@@ -178,6 +178,7 @@ export default function CharacterSheet({
         onChange={(v) => update(key, v as CharacterData[typeof key])}
         max={4}
         dotStyle
+        hideReset
       />
     </div>
   );
