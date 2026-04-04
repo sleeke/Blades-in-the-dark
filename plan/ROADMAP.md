@@ -1,6 +1,15 @@
 # Features ready to implement
 Features in this section have been fully designed and are ready to be implemented.
 
+## Add an account menu
+- The options currently available in the top menu should be condensed into an account menu which is indicated by a material design icon of a profile/headshot
+- This should be the location for other options unless otherwise indicated
+
+## Add a light mode
+- There should be a theme toggle which allows light mode
+- The light mode should still be moody and befitting of the Blades in the Dark theme
+- The theme selector should be in the account menu mentioned in "Add an account menu", above
+
 ## Improve layout
 
 - Checkboxes in general should be on the same line as the trigger text, not below it. E.g. for XP Triggers, Items & Equipment and Armor
@@ -11,6 +20,21 @@ Features in this section have been fully designed and are ready to be implemente
 # Features which need more information
 
 These features should NOT be implemented until more information is provided about how they should work, and what they should look like.
+
+## There should be a team sheet
+- Any player can create a team, after which they are automatically enrolled in the team
+- Once created, a join link should be generated which will allow others to join the team
+- To join a team, the user must select the character from their list that they want to join with
+- If the current user is in a team, the team should appear after login alongside their character(s)
+- When clicking into the team, the team view should be displayed, which should be based on the team sheets found here: https://bladesinthedark.com/sites/default/files/sheets/blades_sheets_v8_2_Blank_Crew_Sheet.pdf
+- The same visual styling that is applied to the character sheet should apply to the team sheet
+- Any member of a team can edit the team sheet
+
+## Data versioning
+- Changes should be versioned so that players can return to a previous version
+- There should be a dropdown in the character sheet UI which will allow rollback to a previous version
+- New versions should be created on a rolling schedule - if there are no changes within the last hour, that version is stored and a new version is created when the next change is made
+- Only the last 10 versions should be stored
 
 ## All players should have read access to all other players' character sheets
 
