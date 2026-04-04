@@ -47,4 +47,7 @@ These features should NOT be implemented until more information is provided abou
 - There should be explanations of what each stat does, and how it affects the game. This could be done through tooltips or a help section. 
   - Examples TBD
 
+## Improved tests
 
+- Test should be added to include data for all fields and make sure it's persisted and retreived correctly during a DB change
+- Review https://github.com/sleeke/Blades-in-the-dark/pull/4/changes#top

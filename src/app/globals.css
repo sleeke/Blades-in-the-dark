@@ -54,6 +54,5 @@ body::before {
 }
 
 * {
-  position: relative;
-  z-index: 1;
+  box-sizing: border-box;
 }
