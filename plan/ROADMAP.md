@@ -1,6 +1,9 @@
 # Features ready to implement
 Features in this section have been fully designed and are ready to be implemented.
 
+## Career directive
+- Made a decision: DO NOT WORK ON THIS PROJECT unless there's a blocker on the main focus (career), or if there's a chance to parallel process.
+
 ## Add an account menu
 - The options currently available in the top menu should be condensed into an account menu which is indicated by a material design icon of a profile/headshot
 - This should be the location for other options unless otherwise indicated
