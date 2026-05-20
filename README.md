@@ -57,6 +57,35 @@ The database tables are created automatically on first use.
 
 Visit [http://localhost:3000/demo](http://localhost:3000/demo) to see the character sheet UI with sample data, no login required.
 
+## Testing
+
+The project uses [Vitest](https://vitest.dev/) for unit tests. No running database or
+server is needed — all external dependencies (database, auth) are mocked.
+
+### Running the tests
+
+```bash
+# Run the full test suite once
+npm test
+
+# Run in watch mode (re-runs on file change)
+npm run test:watch
+```
+
+### Test coverage
+
+| File | What it covers |
+|------|----------------|
+| `src/__tests__/api/characters.test.ts` | `GET /api/characters` and `POST /api/characters` — authentication guard, list retrieval, character creation, and default-data seeding |
+| `src/__tests__/api/characters-id.test.ts` | `GET /api/characters/[id]`, `PUT /api/characters/[id]`, and `DELETE /api/characters/[id]` — authentication guard, ownership enforcement, validation, update, and delete |
+| `src/__tests__/lib/characterDefaults.test.ts` | Schema-protection tests for `defaultCharacterData` — verifies that every field, nested object, array length, and reference constant (playbooks, heritages, items, etc.) retains its expected shape so accidental refactors are caught before they reach the database |
+
+### CI
+
+The tests run automatically on every pull request via the GitHub Actions workflow
+defined in `.github/workflows/test.yml`. A PR cannot be considered ready until all
+tests are green.
+
 ## Deployment
 
 Deploy to [Vercel](https://vercel.com/) and add a Vercel Postgres database from the Storage tab of your project. The `POSTGRES_*` environment variables will be populated automatically.
