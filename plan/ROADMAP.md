@@ -1,23 +1,21 @@
+# Career directive
+- Made a decision: DO NOT WORK ON THIS PROJECT unless there's a blocker on the main focus (career), or if there's a chance to parallel process.
+
 # Features ready to implement
 Features in this section have been fully designed and are ready to be implemented.
 
-## Career directive
-- Made a decision: DO NOT WORK ON THIS PROJECT unless there's a blocker on the main focus (career), or if there's a chance to parallel process.
+## Backup and restore character sheets
 
-## Add an account menu
-- The options currently available in the top menu should be condensed into an account menu which is indicated by a material design icon of a profile/headshot
-- This should be the location for other options unless otherwise indicated
+- There should be a way to download a backup of the character sheet as a JSON file, which can be stored locally and re-uploaded to restore the character sheet to that state. This should be implemented as a menu item titled "Download backup" which will trigger the download of the JSON file. The file should be named with the character name and the date of the backup. There should also be a menu item titled "Upload backup" which will allow the user to select a JSON file from their local storage and upload it to restore the character sheet to that state. The upload process should include validation to ensure that the uploaded file is in the correct format and contains valid data. Tests should be implemented to make sure that the backup and restore functionality works correctly and doesn't lose existing data.
 
-## Add a light mode
-- There should be a theme toggle which allows light mode
-- The light mode should still be moody and befitting of the Blades in the Dark theme
-- The theme selector should be in the account menu mentioned in "Add an account menu", above
+## Restore previous states
+
+Pease implement a way to restore previous states of the character sheets. This would ideally be done by keeping backups for the last 5-10 changes which can be restored at will. 
+
+There should be a dialog which launches from a button titled "Restore old version" placed next to the "Save changes" button. The dialog should allow the user to select to restore any one of 5-10 previous versions, which should be listed with the save time and last item changed. Upon selecting a save point, the state should be updated to the content from the backup. The change should be represented in the history as the latest state change, and indicate in the history that a restore was made. Tests should be implemented to make sure that database operations follow the ACID principles and don't lose existing data.
 
 ## Improve layout
 
-- Checkboxes in general should be on the same line as the trigger text, not below it. E.g. for XP Triggers, Items & Equipment and Armor
-  - The XP Triggers section has been updated, but this is still needed for Trauma Conditions, Items & Equipment, Friends & rivals and Armor
-- X buttons in the Actions area are not needed and should be removed since they throw off the layout and are not actually needed to reset the action rating to 0 (clicking the first dot will do that).
 - The "Save Changes" button at the bottom of the character sheet is not needed and should be removed since changes are saved automatically as they are made. This will also help with the layout and make it less cluttered.
 
 # Features which need more information
