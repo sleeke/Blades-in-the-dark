@@ -3,7 +3,12 @@
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 import { useTheme } from '@/components/ThemeProvider';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+
+export interface CharacterActions {
+  onDownloadBackup: () => void;
+  onUploadBackup: (file: File) => void;
+}
 
 function ProfileIcon() {
   return (
@@ -35,11 +40,25 @@ function MoonIcon() {
   );
 }
 
-export default function Navigation() {
+export default function Navigation({ characterActions }: { characterActions?: CharacterActions }) {
   const { data: session } = useSession();
   const { theme, toggleTheme } = useTheme();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file && characterActions) {
+        characterActions.onUploadBackup(file);
+      }
+      // Reset so the same file can be re-selected if needed
+      e.target.value = '';
+      setOpen(false);
+    },
+    [characterActions]
+  );
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -111,6 +130,41 @@ export default function Navigation() {
                   </span>
                   {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
                 </button>
+
+                {characterActions && (
+                  <div className="border-t border-stone-800 mt-1 pt-1">
+                    <button
+                      onClick={() => { setOpen(false); characterActions.onDownloadBackup(); }}
+                      className="flex items-center gap-2 w-full px-4 py-2 text-sm text-stone-300
+                                 hover:text-amber-400 hover:bg-stone-900/60 transition-colors duration-150"
+                      role="menuitem"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 flex-shrink-0" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                      </svg>
+                      Download backup
+                    </button>
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      className="flex items-center gap-2 w-full px-4 py-2 text-sm text-stone-300
+                                 hover:text-amber-400 hover:bg-stone-900/60 transition-colors duration-150"
+                      role="menuitem"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 flex-shrink-0" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" />
+                      </svg>
+                      Upload backup
+                    </button>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept=".json"
+                      className="hidden"
+                      onChange={handleFileChange}
+                      aria-hidden="true"
+                    />
+                  </div>
+                )}
 
                 <div className="border-t border-stone-800 mt-1 pt-1">
                   <button

@@ -4,6 +4,7 @@ A web application for players of [Blades in the Dark](https://bladesinthedark.co
 
 ## Features
 
+- **Backup & restore** — download a character sheet as a JSON file and re-upload it later to restore that state
 - **User authentication** — register and sign in with email and password
 - **Character sheet editor** — full BITD character sheet with:
   - Text fields (identity, alias, playbook, heritage, background, vice, notes)
@@ -47,6 +48,12 @@ cp .env.local.example .env.local
 
 ```bash
 npm run dev
+```
+
+### Run tests
+
+```bash
+npm test
 ```
 
 Open [http://localhost:3000](http://localhost:3000) — you will be redirected to the login page.
